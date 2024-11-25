@@ -6,9 +6,9 @@ type ListProps = {
 
 const List: React.FC<ListProps> = ({ items }) => {
   return (
-    <ul>
+    <ul className="machineList">
       {items.map((item, index) => (
-        <li className="machineList" key={index}>
+        <li className="machineListItem" key={index}>
           {item}
         </li>
       ))}
