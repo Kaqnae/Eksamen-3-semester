@@ -1,8 +1,12 @@
+html, body{
+    height: 100%;
+    margin: 0;
+}
+
 .dashboard-container{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     height: 100vh;
-    overflow: hidden;
 }
 
 .content-container{
@@ -12,20 +16,29 @@
 }
 
 .left-sidebar{
-    align-items: center;
+    width: 250px;
     margin: 0;
     width: 250px;
+    height: 100%;
     border-right: 1px solid #ddd;
     display: flex;
-    flex-direction: center;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 60px;
+    margin: 0;
+    height: 100%;
+
     
 }
 
 .main-content{
-    flex: 1;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
     
 }
 
@@ -38,22 +51,20 @@
     margin: 0;
     text-align: center;
     
-  }
+    
+}
   
   .machineListItem{
     cursor: pointer;
     border-bottom: 2px solid #ccc
-  }
+}
   
   .machineListItem:hover{
     transform: scale(1.05);
-    transition: transform;
-  }
+    transition: transform 0.2s;
+}
 
 .top-bar{
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 60px;
     display: flex;
@@ -61,7 +72,6 @@
     align-items: center;
     background-color: #282829;
     color: rgb(255, 255, 255);
-    z-index: 10;
 }
 
 .left-section .logo{

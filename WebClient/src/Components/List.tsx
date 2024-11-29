@@ -1,15 +1,25 @@
 import React from "react";
 
-type ListProps = {
-  items: string[];
+type Machine = {
+  id: string;
+  name: string;
 };
 
-const List: React.FC<ListProps> = ({ items }) => {
+type ListProps = {
+  items: Machine[];
+  onItemClick?: (id: string) => void;
+};
+
+const List: React.FC<ListProps> = ({ items, onItemClick }) => {
   return (
     <ul className="machineList">
-      {items.map((item, index) => (
-        <li className="machineListItem" key={index}>
-          {item}
+      {items.map((item) => (
+        <li
+          className="machineListItem"
+          key={item.id}
+          onClick={() => onItemClick && onItemClick(item.id)}
+        >
+          {item.name}
         </li>
       ))}
     </ul>

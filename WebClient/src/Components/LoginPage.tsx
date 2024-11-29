@@ -4,6 +4,7 @@ import TextField from "./TextField";
 import Button from "./Button";
 import SDU from "../Images/SDU.webp";
 import { useNavigate } from "react-router-dom";
+import "./loginpage.css";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const LoginForm = () => {
 
   return (
     <Box
+      className="main-content"
       sx={{
         display: "flex",
         flexDirection: "column",

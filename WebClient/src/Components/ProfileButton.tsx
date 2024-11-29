@@ -1,15 +1,27 @@
 import React, { useState } from "react";
 import ProfileMan from "../Images/profile.png";
+import { useNavigate } from "react-router-dom";
 
 const ProfileButton = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleButtonClick = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleMenuItemClick = () => {
+  const handleLogoutClick = () => {
     setIsMenuOpen(false);
+    navigate("/");
+  };
+
+  const handleEditClick = () => {
+    setIsMenuOpen(false);
+    navigate("/profilepage");
+  };
+  const handleBookingClick = () => {
+    setIsMenuOpen(false);
+    navigate("/bookings");
   };
 
   return (
@@ -22,10 +34,13 @@ const ProfileButton = () => {
 
       {isMenuOpen && (
         <div className="dropdown-menu">
-          <button className="dropdown-item" onClick={handleMenuItemClick}>
+          <button className="dropdown-item" onClick={handleEditClick}>
             Rediger
           </button>
-          <button className="dropdown-item" onClick={handleMenuItemClick}>
+          <button className="dropdown-item" onClick={handleBookingClick}>
+            Bookinger
+          </button>
+          <button className="dropdown-item" onClick={handleLogoutClick}>
             Logout
           </button>
         </div>
