@@ -1,5 +1,5 @@
 import React from "react";
-import TopBar from "./TopBar";
+import TopBar from "../../General_Components/TopBar";
 import "./profilepage.css";
 import { TextField } from "@mui/material";
 

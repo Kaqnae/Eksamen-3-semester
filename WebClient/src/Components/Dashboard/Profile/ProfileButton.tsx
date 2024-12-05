@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import ProfileMan from "../Images/profile.png";
+import ProfileMan from "../../../Images/profile.png";
 import { useNavigate } from "react-router-dom";
 
 const ProfileButton = () => {
+  const name = localStorage.getItem("name");
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -28,7 +30,7 @@ const ProfileButton = () => {
     <div className="profile-button-container">
       <button className="profile-button" onClick={handleButtonClick}>
         {" "}
-        Placeholder-name
+        {name}
         <img className="profile-img" src={ProfileMan} />
       </button>
 

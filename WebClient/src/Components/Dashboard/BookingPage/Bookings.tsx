@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import List from "./List";
-import "./dashboard.css";
-import TopBar from "./TopBar";
-import Drawing from "../Images/tegning.jpg";
-import BookingService from "./Service/BookingService";
+import List from "../../General_Components/List";
+import "../dashboard.css";
+import TopBar from "../../General_Components/TopBar";
+import Drawing from "../../../Images/tegning.jpg";
+import BookingService from "../../Service/BookingService";
 
 interface Booking {
   id: string;

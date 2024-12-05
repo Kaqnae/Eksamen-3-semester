@@ -14,6 +14,8 @@ class LoginService {
       const data = await response.json();
       localStorage.setItem("authToken", data.accessToken);
       localStorage.setItem("userId", data.userId);
+      localStorage.setItem("institutionId", data.institutionId);
+      localStorage.setItem("name", data.name);
     } catch (error) {
       throw new Error("An unexpected error occured. Please try again later");
     }
