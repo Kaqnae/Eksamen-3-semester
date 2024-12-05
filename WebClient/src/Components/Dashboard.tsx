@@ -30,7 +30,11 @@ const Dashboard = () => {
       <TopBar></TopBar>
       <div className="dashboard-container">
         <div className="left-sidebar">
-          <List items={machines} onItemClick={handleMachineClick}></List>
+          <List
+            items={machines}
+            onItemClick={handleMachineClick}
+            renderItem={(machines) => <span>{machines.name}</span>}
+          ></List>
         </div>
         <div className="main-content">
           <img src={Drawing} />

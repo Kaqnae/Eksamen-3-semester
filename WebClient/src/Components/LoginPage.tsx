@@ -1,16 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "./TextField";
 import Button from "./Button";
 import SDU from "../Images/SDU.webp";
 import { useNavigate } from "react-router-dom";
 import "./loginpage.css";
+import LoginService from "./Service/LoginService";
+import { red } from "@mui/material/colors";
 
 const LoginForm = () => {
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    navigate("/dashboard");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = async () => {
+    if (!username || !password) {
+      setError("Both username and password are required");
+      return;
+    }
+
+    try {
+      await LoginService.login(username, password);
+      setError(null);
+      navigate("/dashboard");
+      const userId = localStorage.getItem("userId");
+      console.log(userId);
+    } catch (err: any) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -26,11 +45,15 @@ const LoginForm = () => {
       }}
     >
       <img src={SDU} alt="Logo" width="20%"></img>
+      {error && (
+        <div style={{ color: "red", marginBottom: "10px" }}>{error}</div>
+      )}
       <TextField
         required
         id="outlined-username"
         label="Username"
-        defaultValue=""
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
       />
       <TextField
         required
@@ -38,6 +61,8 @@ const LoginForm = () => {
         label="Password"
         type="password"
         autoComplete="current-password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
       />
       <Button variant="contained" color="primary" onClick={handleLogin}>
         Login

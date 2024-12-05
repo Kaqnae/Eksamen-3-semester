@@ -5,21 +5,27 @@ type Machine = {
   name: string;
 };
 
-type ListProps = {
-  items: Machine[];
-  onItemClick?: (id: string) => void;
+type Booking = {
+  id: string;
+  name: string;
 };
 
-const List: React.FC<ListProps> = ({ items, onItemClick }) => {
+type ListProps<T> = {
+  items: T[];
+  onItemClick: (id: string) => void;
+  renderItem: (item: T) => React.ReactNode;
+};
+
+const List = <T,>({ items, onItemClick, renderItem }: ListProps<T>) => {
   return (
     <ul className="machineList">
       {items.map((item) => (
         <li
           className="machineListItem"
-          key={item.id}
-          onClick={() => onItemClick && onItemClick(item.id)}
+          key={(item as any).resourceId}
+          onClick={() => onItemClick((item as any).resourceId)}
         >
-          {item.name}
+          {renderItem(item)}
         </li>
       ))}
     </ul>
