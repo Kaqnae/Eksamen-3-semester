@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import TextField from "../General_Components/TextField";
-import Button from "../General_Components/Button";
-import SDU from "../../Images/SDU.webp";
+import TextField from "../components/TextField";
+import Button from "../components/Button";
+import SDU from "../assets/SDU.webp";
 import { useNavigate } from "react-router-dom";
-import "./loginpage.css";
-import LoginService from "../Service/LoginService";
+import "../styles/loginpage.css";
+import LoginService from "../service/LoginService";
 import { red } from "@mui/material/colors";
 
 const LoginForm = () => {

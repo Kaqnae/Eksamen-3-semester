@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ProfileMan from "../../../Images/profile.png";
+import ProfileMan from "../assets/profile.png";
 import { useNavigate } from "react-router-dom";
 
 const ProfileButton = () => {

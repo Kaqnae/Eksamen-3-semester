@@ -1,8 +1,7 @@
 import React from "react";
-import Button from "./Button";
-import ProfileMan from "../Images/profile.png";
-import "../Dashboard/dashboard.css";
-import ProfileButton from "../Dashboard/Profile/ProfileButton";
+import ProfileMan from "../assets/profile.png";
+import "../styles/dashboard.css";
+import ProfileButton from "../components/ProfileButton";
 import { useNavigate } from "react-router-dom";
 
 const TopBar = () => {

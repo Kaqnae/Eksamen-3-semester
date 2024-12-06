@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import List from "../General_Components/List";
-import "./dashboard.css";
-import TopBar from "../General_Components/TopBar";
-import Drawing from "../../Images/tegning.jpg";
-import MachineService from "../Service/MachineService";
+import List from "../components/List";
+import "../styles/dashboard.css";
+import TopBar from "../components/TopBar";
+import Drawing from "../assets/tegning.jpg";
+import MachineService from "../service/MachineService";
 
 
 interface Machine{

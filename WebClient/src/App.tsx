@@ -1,7 +1,7 @@
-import LoginForm from "./Login/LoginPage";
-import Dashboard from "./Dashboard/DashboardPage";
-import ProfilePage from "./Dashboard/Profile/ProfilePage";
-import BookingsPage from "../Components/Dashboard/BookingPage/Bookings";
+import LoginForm from "./pages/LoginPage";
+import Dashboard from "./pages/DashboardPage";
+import ProfilePage from "./pages/ProfilePage";
+import BookingsPage from "./pages/Bookings";
 import {
   BrowserRouter as Router,
   Routes,

@@ -1,6 +1,6 @@
 import React from "react";
-import TopBar from "../../General_Components/TopBar";
-import "./profilepage.css";
+import TopBar from "../components/TopBar";
+import "../styles/profilepage.css";
 import { TextField } from "@mui/material";
 
 const ProfilePage = () => {
