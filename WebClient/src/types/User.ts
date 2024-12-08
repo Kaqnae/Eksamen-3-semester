@@ -6,4 +6,5 @@ export type User = {
     role: string,
     username: string | null,
     password: string | null,
+    institutionId: string
 }
