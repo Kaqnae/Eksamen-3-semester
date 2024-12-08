@@ -8,17 +8,10 @@ const ProfilePage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const userId = localStorage.getItem("userId");
-
   useEffect(() => {
     const fetchUser = async () => {
-      if (!userId) {
-        setError("User ID is missing");
-        return;
-      }
-      
       try {
-        const fetchedUser = await new UserService().getUser(userId);
+        const fetchedUser = await new UserService().getUser();
         setUser(fetchedUser);
       } catch (error: any) {
         setError(error.message);
@@ -26,7 +19,7 @@ const ProfilePage = () => {
     }
 
     fetchUser();
-  }, [userId])
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (user) {
@@ -42,18 +35,13 @@ const ProfilePage = () => {
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!userId) {
-      setError("UserId is missing");
-      return;
-    }
-
     if (!user) {
       setError("No user data available");
       return;
     }
 
     try {
-      const updateSucces = await new UserService().updateUser(userId, user);
+      const updateSucces = await new UserService().updateUser(user);
       if (updateSucces) {
         setError(null);
         alert("User updated successfully!")
@@ -94,7 +82,7 @@ const ProfilePage = () => {
             Update
           </button>
         </form>
-        {error && <p className="error">{error}</p>} {/* Vist fejlmeddelelser */}
+        {error && <p className="error">{error}</p>} 
       </div>
     </>
   );

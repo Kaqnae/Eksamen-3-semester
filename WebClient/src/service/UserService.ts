@@ -2,19 +2,25 @@ import { User } from "../types/User";
 
 export class UserService {
   private authToken: string | null;
+  private userId: string | null;
 
   constructor() {
     this.authToken = localStorage.getItem("authToken");
+    this.userId = localStorage.getItem("userId");
   }
 
-  async getUser(userId: string): Promise<User> {
+  async getUser(): Promise<User> {
 
     if (!this.authToken) {
       throw new Error("No authentication token found");
     } 
 
+    if (!this.userId) {
+      throw new Error("No userId available");
+    } 
+
     try {
-      const response = await fetch(`http://localhost:5000/api/users/${userId}`, {
+      const response = await fetch(`http://localhost:5000/api/users/${this.userId}`, {
         method: "GET",
         headers: { 
           "Content-Type": "application/json" ,
@@ -33,14 +39,18 @@ export class UserService {
     }
   }
 
-  async updateUser(userId: string, user: User): Promise<boolean> {
+  async updateUser(user: User): Promise<boolean> {
 
     if (!this.authToken) {
       throw new Error("No authentication token found");
     } 
+
+    if (!this.userId) {
+      throw new Error("No userId available");
+    } 
   
     try {
-      const response = await fetch(`http://localhost:5000/api/users/${userId}`, {
+      const response = await fetch(`http://localhost:5000/api/users/${this.userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

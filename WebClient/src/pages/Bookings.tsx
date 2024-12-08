@@ -1,32 +1,23 @@
 import React, { useEffect, useState } from "react";
-import List from "../components/List";
+import List from "../components/GenericList";
 import "../styles/dashboard.css";
 import TopBar from "../components/TopBar";
 import Drawing from "../assets/tegning.jpg";
 import BookingService from "../service/BookingService";
-
-interface Booking {
-  id: string;
-  userId: string;
-  resourceId: string;
-  date: number;
-  startTime: string;
-  endTime: string;
-  active: boolean;
-}
+import { Booking } from "../types/Booking";
 
 const Dashboard = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const handleItemClick = () => {
-    console.log("Clicked");
+  const handleItemClick = (item: Booking) => {
+    console.log("Clicked:", item);
   };
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const bookingData = await BookingService.fetchBookings();
+        const bookingData = await BookingService.getBookings();
         setBookings(bookingData);
       } catch (error: any) {
         setError(error.message);
@@ -34,7 +25,7 @@ const Dashboard = () => {
     };
 
     fetchBookings();
-  });
+  }, []);
 
   return (
     <>
@@ -42,14 +33,19 @@ const Dashboard = () => {
       <div className="dashboard-container">
         <div className="left-sidebar">
           <List
-            items={bookings.map((booking) => booking.date)}
-            onItemClick={handleItemClick}
-            renderItem={(item) => <span>{item}</span>}
-          ></List>
+            items={bookings}  
+            onItemClick={handleItemClick}  
+            renderItem={(booking: Booking) => (
+            <span>
+              {new Date(booking.date).toLocaleDateString()}  {booking.startTime} - {booking.endTime}
+            </span>
+        )}
+      />
         </div>
         <div className="main-content">
-          <img src={Drawing} />
-          <button className="book-button">Book</button>
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+          </div>
         </div>
       </div>
     </>
