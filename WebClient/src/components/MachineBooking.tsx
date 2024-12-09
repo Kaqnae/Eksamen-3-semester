@@ -38,8 +38,7 @@ const MakeBooking = ({
         const interval = generateTimeIntervals(openTime, closeTime, bookingInterval);
         setIntervals(interval);
 
-        const resourceDetails = await ResourceService.fetchResourceDescription(resourceId);
-        setResourceDesc(resourceDetails);
+        
       } catch (error) {
         console.error("Error fetching institution detuals:", error);
       }
@@ -48,16 +47,28 @@ const MakeBooking = ({
   }, [instituionId]);
 
   useEffect(() => {
+    const fetchResourceDescription = async () => {
+      try {
+        const description = await ResourceService.fetchResourceDescription(resourceId);
+        setResourceDesc(description);
+      }catch(error){
+        console.error("Error fetching resource description:", error);
+      }
+    };
+    fetchResourceDescription();
+  }, [resourceId]);
+
+  useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const data = await BookingService.fetchBookingByResource(resourceId);
+        const data = await BookingService.fetchBookingByResource(resourceId, date);
         setBookings(data);
       }catch(error){
         console.error("Error fetching bookings:", error);
       }
     };
     fetchBookings();
-  }, [resourceId]);
+  }, [resourceId, date]);
 
   const generateTimeIntervals = (
     openTime: string,
@@ -69,13 +80,64 @@ const MakeBooking = ({
     let current = new Date(`${today}T${openTime}:00`);
     const end = new Date(`${today}T${closeTime}:00`);
 
-    while (current < end) {
+    while (current <= end) {
       intervals.push(current.toTimeString().slice(0, 5));
       current = new Date(current.getTime() + interval * 60000);
     }
 
     return intervals;
   };
+
+  const isOverlapping = (start: string, end: string, bookings: any[]): boolean => {
+    return bookings.some((booking) => {
+      return(
+        (start >= booking.startTime && start < booking.endTime) ||
+        (end > booking.startTime && end <= booking.endTime) ||
+        (start <= booking.startTime && end >= booking.endTime)
+      );
+    });
+  };
+
+  const availableEndTimes = () => {
+    if (!selectedStartTime) {
+   
+      return intervals.filter((interval) =>
+        !bookings.some((booking) =>
+          isOverlapping(selectedStartTime, interval, [
+            { date: date, startTime: booking.startTime, endTime: booking.endTime },
+          ])
+        )
+      );
+    }
+  
+    
+    return intervals.filter((interval) =>
+      interval > selectedStartTime && !isOverlapping(selectedStartTime, interval, bookings)
+    );
+  };
+
+  const availableStartTimes = intervals.filter((interval) => {
+    
+    return !bookings.some((booking) =>
+      isOverlapping(interval, interval, [
+        { date: date, startTime: booking.startTime, endTime: booking.endTime },
+      ])
+    );
+  });
+
+  useEffect(() => {
+   
+    if (selectedStartTime) {
+      const newAvailableEndTimes = availableEndTimes();
+      setSelectedEndTime(newAvailableEndTimes[0] || ""); 
+    }
+  }, [selectedStartTime, bookings, intervals]);
+  
+  useEffect(() => {
+    setSelectedStartTime("");
+    setSelectedEndTime("");
+  }, [date]);
+  
 
   const generateDateOptions = () => {
     const dateOptions = [];
@@ -89,6 +151,10 @@ const MakeBooking = ({
   }
 
   const handleBooking = async () => {
+    if(isOverlapping(selectedStartTime, selectedEndTime, bookings)){
+      alert("The selected time overlaps with an existing booking. Please choose a different time");
+      return;
+    }
     try {
       await BookingService.createBooking(
         resourceId,
@@ -133,28 +199,20 @@ const MakeBooking = ({
             <option value="" disabled>
                 Select start time
             </option>
-            {intervals.map((interval, index) => (
-            <option key={index} value={interval}>
-              {interval}
-            </option>
-          ))}
+  {availableStartTimes.map((interval, index) => (
+          <option key={index} value={interval}>{interval}</option>
+        ))}
         </select>
       </label>
       <label>
         End Time:
         <select className="select" value={selectedEndTime} onChange={(e) => setSelectedEndTime(e.target.value)}>
-            <option value="" disabled>
-                Select end time
-            </option>
-            {intervals
-            .filter((interval) => interval > selectedStartTime)
-            .map((interval, index) => (
-              <option key={index} value={interval}>
-                {interval}
-              </option>
-            ))}
-        </select>
-      </label>
+        <option value="" disabled>Select end time</option>
+        {availableEndTimes().map((interval, index) => (
+          <option key={index} value={interval}>{interval}</option>
+        ))}
+      </select>
+    </label>
       <button onClick={handleBooking}>Book</button>
       <h3>Existing Bookings:</h3>
       {bookings.length > 0 ? (
@@ -162,7 +220,7 @@ const MakeBooking = ({
         items={bookings}
         renderItem={(booking) => (
           <div>
-            <strong>Date:</strong> {booking.date} -{" "}
+            <strong>Date:</strong> {new Date(booking.date).toLocaleDateString()} -{" "}
             <strong>Time:</strong> {booking.startTime} to {booking.endTime}
           </div>
         )}
