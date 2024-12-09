@@ -95,7 +95,6 @@ const MakeBooking = ({
         date,
         selectedStartTime,
         selectedEndTime,
-        true
       );
       alert("Booking created succesfully");
     } catch (error) {

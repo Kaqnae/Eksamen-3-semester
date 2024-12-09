@@ -6,6 +6,5 @@ export type Booking = {
     date: number;
     startTime: string;
     endTime: string;
-    active: boolean;
 }
 

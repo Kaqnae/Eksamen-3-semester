@@ -47,7 +47,7 @@ class BookingService {
 
  
 
-  async createBooking(resourceId: string, date: string, startTime: string, endTime: string, active: boolean): Promise<any>{
+  async createBooking(resourceId: string, date: string, startTime: string, endTime: string): Promise<any>{
     const authToken = localStorage.getItem("authToken");
     const userId = localStorage.getItem("userId");
     const institutionId = localStorage.getItem("institutionId");
@@ -66,7 +66,6 @@ class BookingService {
           date,
           startTime,
           endTime,
-          active,
         }),
       });
 
