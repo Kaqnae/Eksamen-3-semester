@@ -1,10 +1,11 @@
-export interface Booking {
+export type Booking = {
     id: string;
     institutionId: string;
     userId: string;
-    resourceId: string;
-    date: string;
+    resourceId: string | null;
+    date: number;
     startTime: string;
     endTime: string;
     active: boolean;
 }
+

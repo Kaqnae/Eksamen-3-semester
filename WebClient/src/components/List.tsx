@@ -10,7 +10,7 @@ type ListProps<T> = {
 const List = <T,>({ items, onItemClick, renderItem }: ListProps<T>) => {
   return (
     <ul className="machineList">
-      {items.map((item, index) => (
+      {items.map((item) => (
         <li
           className="machineListItem"
           key={(item as any).id}

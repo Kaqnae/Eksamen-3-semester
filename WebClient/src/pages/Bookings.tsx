@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import List from "../components/GenericList";
+import List from "../components/List";
 import "../styles/dashboard.css";
 import TopBar from "../components/TopBar";
 import Drawing from "../assets/tegning.jpg";
 import BookingService from "../service/BookingService";
-import { Booking } from "../types/Booking";
+import { Booking } from "../model/Booking";
 
 const Dashboard = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
