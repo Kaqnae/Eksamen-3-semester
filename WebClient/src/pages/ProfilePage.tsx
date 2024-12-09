@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import TopBar from "../components/TopBar";
 import "../styles/profilepage.css";
-import { User } from "../types/User";
-import { UserService } from "../service/UserService";
+import { User } from "../model/User";
+import UserService from "../service/UserService";
 
 const ProfilePage = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -11,7 +11,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const fetchedUser = await new UserService().getUser();
+        const fetchedUser = await UserService.getUser();
         setUser(fetchedUser);
       } catch (error: any) {
         setError(error.message);
@@ -41,7 +41,7 @@ const ProfilePage = () => {
     }
 
     try {
-      const updateSucces = await new UserService().updateUser(user);
+      const updateSucces = await UserService.updateUser(user);
       if (updateSucces) {
         setError(null);
         alert("User updated successfully!")

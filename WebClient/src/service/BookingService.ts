@@ -47,12 +47,34 @@ class BookingService {
     }
   }
 
-  async createBooking(
-    resourceId: string,
-    date: string,
-    startTime: string,
-    endTime: string
-  ): Promise<any> {
+  async deleteBooking(bookingId: string): Promise<boolean> {
+
+    if (!this.authToken) {
+      throw new Error("No authentication token found");
+    } 
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/bookings/${bookingId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.authToken}`,
+          },
+        }
+      );
+  
+      if (response.ok) {
+        return true; 
+      }
+      return false; 
+    } catch (error) {
+      throw new Error("Error deleting booking");
+    }
+  }
+
+  async createBooking(resourceId: string, date: string, startTime: string, endTime: string): Promise<any>{
     const authToken = localStorage.getItem("authToken");
     const userId = localStorage.getItem("userId");
     const institutionId = localStorage.getItem("institutionId");

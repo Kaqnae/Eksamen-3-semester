@@ -1,6 +1,6 @@
-import { User } from "../types/User";
+import { User } from "../model/User";
 
-export class UserService {
+class UserService {
   private authToken: string | null;
   private userId: string | null;
 
@@ -70,3 +70,5 @@ export class UserService {
     }
   }
 }
+
+export default new UserService();
