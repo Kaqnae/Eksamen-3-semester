@@ -3,37 +3,37 @@ import List from "../components/List";
 import "../styles/dashboard.css";
 import TopBar from "../components/TopBar";
 import Drawing from "../assets/tegning.jpg";
-import MachineService from "../service/MachineService";
-
-
-interface Machine{
-  id: string;
-  name: string;
-  description: string;
-  resourceImage: string;
-  institutionId: string;
-}
+import ResourceService from "../service/ResourceService";
+import { Resource } from "../model/Resource";
+import MakeBooking from "../components/MachineBooking";
 
 const Dashboard = () => {
- const [machines, setMachines] = useState<Machine[]>([]);
- const [error, setError] = useState<string | null>(null);
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedResource, setSelectedResource] = useState<Resource | null>(
+    null
+  );
 
- const handleMachineClick = () => {
-  console.log("Clicked");
- };
-
-useEffect(() => {
-  const fetchMachines = async () => {
-    try {
-      const machineData = await MachineService.fetchMachines();
-      setMachines(machineData); 
-    }catch (error: any){
-      setError(error.message);
-    }
+  const handleMachineClick = (resource: Resource) => {
+    setSelectedResource(resource);
   };
 
-  fetchMachines();
-});
+  const handleCloseBooking = () => {
+    setSelectedResource(null);
+  };
+
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        const resourceData = await ResourceService.fetchResource();
+        setResources(resourceData);
+      } catch (error: any) {
+        setError(error.message);
+      }
+    };
+
+    fetchResources();
+  }, []);
 
   return (
     <>
@@ -41,14 +41,19 @@ useEffect(() => {
       <div className="dashboard-container">
         <div className="left-sidebar">
           <List
-            items={machines.map((machine) => machine.name)}
+            items={resources}
             onItemClick={handleMachineClick}
-            renderItem={(item) => <span>{item}</span>}
+            renderItem={(resource) => <span>{resource.name}</span>}
           ></List>
         </div>
         <div className="main-content">
           <img src={Drawing} />
-          <button className="book-button">Book</button>
+          {selectedResource && (
+            <MakeBooking
+              instituionId={selectedResource.institutionId}
+              resourceId={selectedResource.id}
+            />
+          )}
         </div>
       </div>
     </>

@@ -37,10 +37,10 @@ const ProfileButton = () => {
       {isMenuOpen && (
         <div className="dropdown-menu">
           <button className="dropdown-item" onClick={handleEditClick}>
-            Rediger
+            Edit Profile
           </button>
           <button className="dropdown-item" onClick={handleBookingClick}>
-            Bookinger
+            Bookings
           </button>
           <button className="dropdown-item" onClick={handleLogoutClick}>
             Logout
