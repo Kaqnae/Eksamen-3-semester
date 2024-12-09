@@ -88,18 +88,25 @@ class BookingService {
     }
   }
 
-  async fetchBookingByResource(resourceId: string): Promise<any[]> {
+  async fetchBookingByResource(
+    resourceId: string,
+    currentDate: Date
+  ): Promise<any[]> {
     const authToken = localStorage.getItem("authToken");
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/bookings/all?resourceId=${resourceId}`,
+        `http://localhost:5000/api/bookings/resourcebookings?resourceId=${resourceId}`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${authToken}`,
           },
+          body: JSON.stringify({
+            ResourceId: resourceId,
+            Date: currentDate,
+          }),
         }
       );
       if (!response.ok) {
