@@ -1,4 +1,4 @@
-import {Booking} from "../model/Booking"
+import { Booking } from "../model/Booking";
 
 class BookingService {
   private authToken: string | null;
@@ -14,14 +14,16 @@ class BookingService {
 
     if (!this.authToken) {
       throw new Error("No authentication token found");
-    } 
+    }
 
     if (!this.userId) {
       throw new Error("No userId available");
-    } 
+    }
 
     try {
-      const response = await fetch( `http://localhost:5000/api/bookings/pending`, {
+      const response = await fetch(
+        `http://localhost:5000/api/bookings/pending`,
+        {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -77,7 +79,7 @@ class BookingService {
     const userId = localStorage.getItem("userId");
     const institutionId = localStorage.getItem("institutionId");
 
-    try{
+    try {
       const response = await fetch(`http://localhost:5000/api/bookings`, {
         method: "POST",
         headers: {
@@ -94,39 +96,41 @@ class BookingService {
         }),
       });
 
-      if(!response.ok){
+      if (!response.ok) {
         const errorMessage = await response.text();
         throw new Error(errorMessage || "Couldn't create booking.");
       }
 
       const newBooking: Booking = await response.json();
       return newBooking;
-    }catch(error){
-      throw new Error("An unexpected error occurred while creatin the booking.");
+    } catch (error) {
+      throw new Error(
+        "An unexpected error occurred while creatin the booking."
+      );
     }
   }
 
-  async fetchBookingByResource(resourceId: string): Promise<any[]>{
+  async fetchBookingByResource(resourceId: string): Promise<any[]> {
     const authToken = localStorage.getItem("authToken");
 
-    try{
+    try {
       const response = await fetch(
         `http://localhost:5000/api/bookings/all?resourceId=${resourceId}`,
         {
           method: "GET",
-          headers:{
+          headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${authToken}`,
           },
         }
       );
-      if (!response.ok){
+      if (!response.ok) {
         const errorMessage = await response.text();
         throw new Error(errorMessage || "Couldn't get bookings");
       }
       const data = await response.json();
       return data;
-    }catch(error){
+    } catch (error) {
       throw new Error("An unexpected error occurred. Please try again later");
     }
   }
