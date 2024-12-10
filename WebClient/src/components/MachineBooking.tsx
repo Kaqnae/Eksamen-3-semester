@@ -50,7 +50,7 @@ const MakeBooking = ({
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const data = await BookingService.fetchBookingByResource(resourceId);
+        const data = await new BookingService().fetchBookingByResource(resourceId);
         setBookings(data);
       }catch(error){
         console.error("Error fetching bookings:", error);
@@ -90,7 +90,7 @@ const MakeBooking = ({
 
   const handleBooking = async () => {
     try {
-      await BookingService.createBooking(
+      await new BookingService().createBooking(
         resourceId,
         date,
         selectedStartTime,
