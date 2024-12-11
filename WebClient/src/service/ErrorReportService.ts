@@ -34,7 +34,7 @@ class ErrorReportService {
   async isErrorReportActive(resourceId: string): Promise<boolean> {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/error-reports/active?reosourceId=${resourceId}`,
+        `http://localhost:5000/api/error-reports/active?resourceId=${resourceId}`,
         {
           method: "GET",
           headers: {
