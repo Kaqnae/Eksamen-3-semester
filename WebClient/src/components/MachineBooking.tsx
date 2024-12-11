@@ -73,7 +73,7 @@ const MakeBooking = ({
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const data = await BookingService.fetchBookingByResource(
+        const data = await new BookingService().fetchBookingByResource(
           resourceId,
           date
         );
@@ -179,7 +179,7 @@ const MakeBooking = ({
       return;
     }
     try {
-      await BookingService.createBooking(
+      await new BookingService().createBooking(
         resourceId,
         date,
         selectedStartTime,
@@ -187,7 +187,7 @@ const MakeBooking = ({
       );
       alert("Booking created succesfully");
 
-      const newBookingData = await BookingService.fetchBookingByResource(
+      const newBookingData = await new BookingService().fetchBookingByResource(
         resourceId,
         date
       );
