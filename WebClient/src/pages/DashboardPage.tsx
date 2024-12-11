@@ -6,12 +6,16 @@ import Drawing from "../assets/tegning.jpg";
 import ResourceService from "../service/ResourceService";
 import { Resource } from "../model/Resource";
 import MakeBooking from "../components/MachineBooking";
+import ErrorReportService from "../service/ErrorReportService";
 
 const Dashboard = () => {
   const [resources, setResources] = useState<Resource[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [selectedResource, setSelectedResource] = useState<Resource | null>(
     null
+  );
+  const [errorReports, setErrorReports] = useState<{ [key: string]: boolean }>(
+    {}
   );
 
   const handleMachineClick = (resource: Resource) => {
@@ -35,6 +39,26 @@ const Dashboard = () => {
     fetchResources();
   }, []);
 
+  useEffect(() => {
+    const errorReportService = new ErrorReportService();
+    const fetchErrorReports = async () => {
+      try {
+        const statuses: { [key: string]: boolean } = {};
+        for (const resource of resources) {
+          const resourceId = resource.id;
+          const isActive = await errorReportService.isErrorReportActive(
+            resourceId
+          );
+          statuses[resourceId] = isActive;
+        }
+        setErrorReports(statuses);
+      } catch (error) {
+        console.error("Error fetching error report statuses:", error);
+      }
+    };
+    fetchErrorReports();
+  }, [resources]);
+
   return (
     <>
       <TopBar></TopBar>
@@ -43,8 +67,16 @@ const Dashboard = () => {
           <List
             items={resources}
             onItemClick={handleMachineClick}
-            renderItem={(resource) => <span>{resource.name}</span>}
-          ></List>
+            renderItem={(resource) => (
+              <span
+                className={`resource ${
+                  errorReports[resource.id] ? "resource-error" : ""
+                }`}
+              >
+                {resource.name}
+              </span>
+            )}
+          />
         </div>
         <div className="main-content">
           <img src={Drawing} />

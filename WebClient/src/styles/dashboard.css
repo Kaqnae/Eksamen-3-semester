@@ -156,3 +156,7 @@ html, body{
     right: 50px;
     position: absolute;
 }
+
+.resource-error{
+    color: red !important;
+}
