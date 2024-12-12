@@ -6,7 +6,7 @@ class UserService {
 
   constructor() {
     // Fetch authentication token and user ID from local storage during initialization
-    this.authToken = localStorage.getItem("authToken");
+    this.authToken = sessionStorage.getItem("authToken");
     this.userId = localStorage.getItem("userId");
   }
 
@@ -25,13 +25,16 @@ class UserService {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/users/${this.userId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json", // Specify JSON content type
-          Authorization: `Bearer ${this.authToken}`, // Include auth token in headers
-        },
-      });
+      const response = await fetch(
+        `http://localhost:5000/api/users/${this.userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json", // Specify JSON content type
+            Authorization: `Bearer ${this.authToken}`, // Include auth token in headers
+          },
+        }
+      );
 
       if (!response.ok) {
         const errorMessage = await response.text();
@@ -61,14 +64,17 @@ class UserService {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/users/${this.userId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json", // Specify JSON content type
-          Authorization: `Bearer ${this.authToken}`, // Include auth token in headers
-        },
-        body: JSON.stringify(user), // Send the updated user details in the request body
-      });
+      const response = await fetch(
+        `http://localhost:5000/api/users/${this.userId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json", // Specify JSON content type
+            Authorization: `Bearer ${this.authToken}`, // Include auth token in headers
+          },
+          body: JSON.stringify(user), // Send the updated user details in the request body
+        }
+      );
 
       if (!response.ok) {
         const errorMessage = await response.text();

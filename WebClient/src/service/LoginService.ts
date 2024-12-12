@@ -12,7 +12,7 @@ class LoginService {
         throw new Error(errorMessage || "Login failed.");
       }
       const data = await response.json();
-      localStorage.setItem("authToken", data.accessToken);
+      sessionStorage.setItem("authToken", data.accessToken);
       localStorage.setItem("userId", data.userId);
       localStorage.setItem("institutionId", data.institutionId);
       localStorage.setItem("name", data.name);

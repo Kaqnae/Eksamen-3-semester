@@ -1,7 +1,7 @@
 class ResourceService {
   async fetchResource(): Promise<any[]> {
     const userId = localStorage.getItem("userId");
-    const authToken = localStorage.getItem("authToken");
+    const authToken = sessionStorage.getItem("authToken");
     const institutionId = localStorage.getItem("institutionId");
 
     try {
@@ -27,10 +27,10 @@ class ResourceService {
     }
   }
 
-  async fetchResourceDescription(resourceId: string): Promise<string>{
+  async fetchResourceDescription(resourceId: string): Promise<string> {
     const authToken = localStorage.getItem("authToken");
 
-    try{
+    try {
       const response = await fetch(
         `http://localhost:5000/api/resources/${resourceId}`,
         {
@@ -42,15 +42,17 @@ class ResourceService {
         }
       );
 
-      if(!response.ok){
+      if (!response.ok) {
         const errorMessage = await response.text();
-        throw new Error(errorMessage || "Failed to fetch resource description.");
+        throw new Error(
+          errorMessage || "Failed to fetch resource description."
+        );
       }
 
       const data = await response.json();
       return data.description;
-    }catch(error){
-      console.error("Error fetching resource description:", error)
+    } catch (error) {
+      console.error("Error fetching resource description:", error);
       throw error;
     }
   }

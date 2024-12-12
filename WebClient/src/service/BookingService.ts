@@ -6,7 +6,7 @@ class BookingService {
 
   constructor() {
     // Fetch auth token and user ID from local storage during initialization
-    this.authToken = localStorage.getItem("authToken");
+    this.authToken = sessionStorage.getItem("authToken");
     this.userId = localStorage.getItem("userId");
   }
 
@@ -101,7 +101,7 @@ class BookingService {
     startTime: string,
     endTime: string
   ): Promise<any> {
-    const authToken = localStorage.getItem("authToken"); // Fetch auth token from local storage
+    const authToken = sessionStorage.getItem("authToken"); // Fetch auth token from local storage
     const userId = localStorage.getItem("userId"); // Fetch user ID from local storage
     const institutionId = localStorage.getItem("institutionId"); // Fetch institution ID from local storage
 
