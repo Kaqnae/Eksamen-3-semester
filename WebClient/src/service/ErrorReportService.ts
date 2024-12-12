@@ -5,7 +5,7 @@ class ErrorReportService {
   private userId: string | null;
 
   constructor() {
-    this.authToken = localStorage.getItem("authToken");
+    this.authToken = sessionStorage.getItem("authToken");
     this.userId = localStorage.getItem("userId");
   }
 
