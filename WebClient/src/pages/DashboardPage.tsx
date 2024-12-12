@@ -29,7 +29,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchResources = async () => {
       try {
-        const resourceData = await ResourceService.fetchResource();
+        const resourceData = await new ResourceService().fetchResource();
         setResources(resourceData);
       } catch (error: any) {
         setError(error.message);

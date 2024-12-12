@@ -58,4 +58,4 @@ class ResourceService {
   }
 }
 
-export default new ResourceService();
+export default ResourceService;

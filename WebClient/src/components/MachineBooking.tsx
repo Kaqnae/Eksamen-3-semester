@@ -59,7 +59,7 @@ const MakeBooking = ({
   useEffect(() => {
     const fetchResourceDescription = async () => {
       try {
-        const description = await ResourceService.fetchResourceDescription(
+        const description = await new ResourceService().fetchResourceDescription(
           resourceId
         );
         setResourceDesc(description);
