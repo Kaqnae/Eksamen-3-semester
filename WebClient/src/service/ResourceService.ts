@@ -37,8 +37,6 @@ class ResourceService {
   }
 
   async fetchResourceDescription(resourceId: string): Promise<string> {
-    const authToken = localStorage.getItem("authToken");
-
     try {
       const response = await fetch(
         `http://localhost:5000/api/resources/${resourceId}`,
@@ -46,7 +44,7 @@ class ResourceService {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
+            Authorization: `Bearer ${this.authToken}`,
           },
         }
       );
@@ -66,30 +64,27 @@ class ResourceService {
     }
   }
 
-async fetchResourceName(resourceId: string): Promise<string> {
-
-  if (!this.authToken) {
-    throw new Error("No authentication token found"); // Ensure auth token is available
-  }
-  
-  try {
-    const response = await fetch(
-      `http://localhost:5000/api/resources/${resourceId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authToken}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      const errorMessage = await response.text();
-      throw new Error(
-        errorMessage || "Failed to fetch resource name."
-      );
+  async fetchResourceName(resourceId: string): Promise<string> {
+    if (!this.authToken) {
+      throw new Error("No authentication token found"); // Ensure auth token is available
     }
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/resources/${resourceId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.authToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage || "Failed to fetch resource name.");
+      }
 
       const data = await response.json();
       return data.name;
