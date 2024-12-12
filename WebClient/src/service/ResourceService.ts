@@ -64,7 +64,7 @@ class ResourceService {
     }
   }
 
-  async fetchResourceName(resourceId: string): Promise<string> {
+  async fetchResourceName(resourceId: string): Promise<string | null> {
     if (!this.authToken) {
       throw new Error("No authentication token found"); // Ensure auth token is available
     }
@@ -82,8 +82,7 @@ class ResourceService {
       );
 
       if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(errorMessage || "Failed to fetch resource name.");
+        return null;
       }
 
       const data = await response.json();
