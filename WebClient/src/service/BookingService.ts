@@ -1,4 +1,5 @@
 import { Booking } from "../model/Booking";
+import ResourceService from "./ResourceService";
 
 class BookingService {
   private authToken: string | null; // Authentication token for API calls
@@ -48,6 +49,11 @@ class BookingService {
       }
 
       const responseJson = await response.json();
+      for (let booking of responseJson) {
+        if (booking.resourceId) {
+            booking.resourceName = await new ResourceService().fetchResourceName(booking.resourceId);
+        }
+      }
       return responseJson as Booking[]; // Parse and return the response as an array of bookings
     } catch (error) {
       throw new Error("Error fetching bookings"); // Handle unexpected errors

@@ -86,7 +86,7 @@ const Dashboard = () => {
                 <strong>Time:</strong> {selectedBooking.startTime} - {selectedBooking.endTime}
               </p>
               <p>
-                <strong>Resource ID:</strong> {selectedBooking.resourceId || "N/A"}
+                <strong>Resource:</strong> {selectedBooking.resourceName || ""}
               </p>
               {/* Button to delete the selected booking */}
               <button onClick={handleDelete} className="delete-button">
