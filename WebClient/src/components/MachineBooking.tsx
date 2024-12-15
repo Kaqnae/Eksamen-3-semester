@@ -59,9 +59,8 @@ const MakeBooking = ({
   useEffect(() => {
     const fetchResourceDescription = async () => {
       try {
-        const description = await new ResourceService().fetchResourceDescription(
-          resourceId
-        );
+        const description =
+          await new ResourceService().fetchResourceDescription(resourceId);
         setResourceDesc(description);
       } catch (error) {
         console.error("Error fetching resource description:", error);
@@ -200,9 +199,6 @@ const MakeBooking = ({
 
   return (
     <div>
-      <h2>Booking at {institution?.name}</h2>
-      <h3>Description:</h3>
-      <p>{resourceDesc}</p>
       {institution?.imageUrl && (
         <img
           src={institution.imageUrl}
@@ -210,7 +206,9 @@ const MakeBooking = ({
           width="200"
         ></img>
       )}
-
+      <h2>Booking at {institution?.name}</h2>
+      <h3>Description:</h3>
+      <p>{resourceDesc}</p>
       <label>
         Date:
         <select
@@ -260,8 +258,12 @@ const MakeBooking = ({
           ))}
         </select>
       </label>
-      <button onClick={handleBooking}>Book</button>
-      <button onClick={handleOpenModel}>Report an issue</button>
+      <button className="book-button" onClick={handleBooking}>
+        Book
+      </button>
+      <button className="error-report-button" onClick={handleOpenModel}>
+        Report an issue
+      </button>
       {isModelOpen && (
         <ErrorReport
           resourceId={resourceId}

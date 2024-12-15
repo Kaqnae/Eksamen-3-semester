@@ -6,6 +6,13 @@
 }
 
 .book-button{
-    
-    
+    background-color: rgb(15, 117, 233);
+}
+
+.error-report-button{
+    background-color: rgb(15, 117, 233);
+}
+
+.delete-booking{
+    background-color: rgb(15, 117, 233);
 }

@@ -26,6 +26,11 @@ const ProfileButton = () => {
     navigate("/bookings");
   };
 
+  const handleDashboardClick = () => {
+    setIsMenuOpen(false);
+    navigate("/dashboard");
+  };
+
   return (
     <div className="profile-button-container">
       <button className="profile-button" onClick={handleButtonClick}>
@@ -38,6 +43,9 @@ const ProfileButton = () => {
         <div className="dropdown-menu">
           <button className="dropdown-item" onClick={handleEditClick}>
             Edit Profile
+          </button>
+          <button className="dropdown-item" onClick={handleDashboardClick}>
+            Dashboard
           </button>
           <button className="dropdown-item" onClick={handleBookingClick}>
             Bookings

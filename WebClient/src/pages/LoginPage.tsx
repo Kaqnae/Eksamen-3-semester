@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "../components/TextField";
 import Button from "../components/Button";
-import SDU from "../assets/SDU.webp";
+import SDU from "../assets/resourceplanner.png";
 import { useNavigate } from "react-router-dom";
 import "../styles/loginpage.css";
 import LoginService from "../service/LoginService";
@@ -44,7 +44,13 @@ const LoginForm = () => {
         "& .MuiButton.root": { m: 1, width: "100%", maxWidth: "25ch" },
       }}
     >
-      <img src={SDU} alt="Logo" width="20%"></img>
+      <h1>ResourcePlanner</h1>
+      <img
+        className="resourceplanner-picture"
+        src={SDU}
+        alt="Logo"
+        width="20%"
+      ></img>
       {error && (
         <div style={{ color: "red", marginBottom: "10px" }}>{error}</div>
       )}

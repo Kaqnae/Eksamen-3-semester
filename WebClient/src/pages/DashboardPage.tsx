@@ -59,6 +59,12 @@ const Dashboard = () => {
     fetchErrorReports();
   }, [resources]);
 
+  useEffect(() => {
+    if (resources.length > 0) {
+      const errorReportService = new ErrorReportService();
+    }
+  });
+
   return (
     <>
       <TopBar></TopBar>
