@@ -70,6 +70,7 @@ const Dashboard = () => {
                 {new Date(booking.date).toLocaleDateString()} {booking.startTime} - {booking.endTime}
               </span>
             )}
+            listClassName="my-bookings"
           />
         </div>
         {/* Main content area */}

@@ -5,11 +5,12 @@ type ListProps<T> = {
   items: T[];
   onItemClick?: (item: T) => void;
   renderItem: (item: T) => React.ReactNode;
+  listClassName?: string;
 };
 
-const List = <T,>({ items, onItemClick, renderItem }: ListProps<T>) => {
+const List = <T,>({ items, onItemClick, renderItem, listClassName }: ListProps<T>) => {
   return (
-    <ul className="machineList">
+    <ul className={`machineList ${listClassName || ""}`}>
       {items.map((item) => (
         <li
           className="machineListItem"

@@ -7,6 +7,7 @@ import ResourceService from "../service/ResourceService";
 import { Resource } from "../model/Resource";
 import MakeBooking from "../components/MachineBooking";
 import ErrorReportService from "../service/ErrorReportService";
+import InstitutionService from "../service/InstitutionService";
 
 const Dashboard = () => {
   const [resources, setResources] = useState<Resource[]>([]);
@@ -18,6 +19,8 @@ const Dashboard = () => {
     {}
   );
 
+  const [institutionImg, setInstitutionImg] = useState<string | null>(null);
+
   const handleMachineClick = (resource: Resource) => {
     setSelectedResource(resource);
   };
@@ -26,11 +29,29 @@ const Dashboard = () => {
     setSelectedResource(null);
   };
 
+  const refreshErrorReports = async () => {
+    try {
+      const errorReportService = new ErrorReportService();
+      const statuses: { [key: string]: boolean } = {};
+      for (const resource of resources) {
+        const resourceId = resource.id;
+        const isActive = await errorReportService.isErrorReportActive(
+          resourceId
+        );
+        statuses[resourceId] = isActive;
+      }
+      setErrorReports(statuses);
+    } catch (error) {
+      console.error("Error fetching error report statuses:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchResources = async () => {
       try {
         const resourceData = await new ResourceService().fetchResource();
         setResources(resourceData);
+        refreshErrorReports();
       } catch (error: any) {
         setError(error.message);
       }
@@ -39,32 +60,7 @@ const Dashboard = () => {
     fetchResources();
   }, []);
 
-  useEffect(() => {
-    const errorReportService = new ErrorReportService();
-    const fetchErrorReports = async () => {
-      try {
-        const statuses: { [key: string]: boolean } = {};
-        for (const resource of resources) {
-          const resourceId = resource.id;
-          const isActive = await errorReportService.isErrorReportActive(
-            resourceId
-          );
-          statuses[resourceId] = isActive;
-        }
-        setErrorReports(statuses);
-      } catch (error) {
-        console.error("Error fetching error report statuses:", error);
-      }
-    };
-    fetchErrorReports();
-  }, [resources]);
-
-  useEffect(() => {
-    if (resources.length > 0) {
-      const errorReportService = new ErrorReportService();
-    }
-  });
-
+  
   return (
     <>
       <TopBar></TopBar>
@@ -82,6 +78,7 @@ const Dashboard = () => {
                 {resource.name}
               </span>
             )}
+            listClassName="machineList-dashboard"
           />
         </div>
         <div className="main-content">
@@ -90,6 +87,7 @@ const Dashboard = () => {
             <MakeBooking
               instituionId={selectedResource.institutionId}
               resourceId={selectedResource.id}
+              onErrorReported={refreshErrorReports}
             />
           )}
         </div>

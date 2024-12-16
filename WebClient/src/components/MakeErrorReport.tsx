@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import ErrorReportService from "../service/ErrorReportService";
 import { ErrorReportProps } from "../model/ErrorReport";
 
-const ErrorReport: React.FC<ErrorReportProps> = ({
+const ErrorReport: React.FC<ErrorReportProps & { onErrorReported: () => void }> = ({
   resourceId,
   institutionId,
   onClose,
+  onErrorReported,
 }) => {
   const [description, setDescription] = useState("");
 
@@ -26,6 +27,7 @@ const ErrorReport: React.FC<ErrorReportProps> = ({
         userId,
       });
       alert("Error report created successfully");
+      onErrorReported();
       onClose();
     } catch (error) {
       console.error(error);
