@@ -23,11 +23,15 @@ const Dashboard = () => {
     if (selectedBooking) {
       try {
         // Call the BookingService to delete the booking
-        const deleteSuccess = await new BookingService().deleteBooking(selectedBooking.id);
+        const deleteSuccess = await new BookingService().deleteBooking(
+          selectedBooking.id
+        );
         if (deleteSuccess) {
           alert("Booking deleted successfully!");
           // Update the bookings list by removing the deleted booking
-          setBookings((prev) => prev.filter((booking) => booking.id !== selectedBooking.id));
+          setBookings((prev) =>
+            prev.filter((booking) => booking.id !== selectedBooking.id)
+          );
           setSelectedBooking(null); // Clear the selected booking
           setError(null); // Clear any existing error messages
         }
@@ -67,7 +71,8 @@ const Dashboard = () => {
             renderItem={(booking: Booking) => (
               <span>
                 {/* Format and display the booking date and time */}
-                {new Date(booking.date).toLocaleDateString()} {booking.startTime} - {booking.endTime}
+                {new Date(booking.date).toLocaleDateString()}{" "}
+                {booking.startTime} - {booking.endTime}
               </span>
             )}
             listClassName="my-bookings"
@@ -84,7 +89,8 @@ const Dashboard = () => {
                 {new Date(selectedBooking.date).toLocaleDateString()}
               </p>
               <p>
-                <strong>Time:</strong> {selectedBooking.startTime} - {selectedBooking.endTime}
+                <strong>Time:</strong> {selectedBooking.startTime} -{" "}
+                {selectedBooking.endTime}
               </p>
               <p>
                 <strong>Resource:</strong> {selectedBooking.resourceName || ""}

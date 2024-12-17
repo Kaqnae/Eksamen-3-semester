@@ -1,4 +1,4 @@
-export interface ErrorReport {
+export type ErrorReport = {
   id?: string;
   institutionId: string;
   createdDate: string;
@@ -6,10 +6,10 @@ export interface ErrorReport {
   description: string;
   userId: string;
   resolved: boolean;
-}
+};
 
-export interface ErrorReportProps {
+export type ErrorReportProps = {
   resourceId: string;
   institutionId: string;
   onClose: () => void;
-}
+};

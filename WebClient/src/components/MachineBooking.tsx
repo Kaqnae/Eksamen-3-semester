@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from "react";
-import BookingService from "../service/BookingService";
 import {
   generateTimeIntervals,
   isOverlapping,
   generateDateOptions,
 } from "../utils/timeUtils";
 import { Institution } from "../model/Institution";
-import InstitutionService from "../service/InstitutionService";
+import { Resource, ResourceDetails } from "../model/Resource";
 import List from "./List";
-import ResourceService from "../service/ResourceService";
 import "../styles/booking.css";
 import ErrorReport from "./MakeErrorReport";
 import DateSelector from "./DateSelector";
 import TimeSelector from "./TimeSelector";
 import { fetchInstitutionWithIntervals } from "../utils/institutionUtils";
-import { fetchResourceDesc } from "../utils/resourceUtils";
-import { createBooking, FetchBookingResource } from "../utils/bookingUtils";
-import { calculateAvailableEndTimes, calculateAvailableStartTimes } from "../utils/timeAvailabilityUtils";
+import { fetchResourceDetails } from "../utils/resourceUtils";
+import { createBooking, fetchBookingResource } from "../utils/bookingUtils";
+import {
+  calculateAvailableEndTimes,
+  calculateAvailableStartTimes,
+} from "../utils/timeAvailabilityUtils";
 
 const MakeBooking = ({
   instituionId,
@@ -27,6 +28,7 @@ const MakeBooking = ({
   resourceId: string;
   onErrorReported: () => void;
 }) => {
+  // State management
   const [institution, setInstitution] = useState<Institution | null>(null);
   const [resourceDesc, setResourceDesc] = useState<string | null>(null);
   const [intervals, setIntervals] = useState<string[]>([]);
@@ -38,7 +40,9 @@ const MakeBooking = ({
   const [isModelOpen, setIsModelOpen] = useState(false);
   const [showBookings, setShowBookings] = useState(true);
   const [bookings, setBookings] = useState<any[]>([]);
+  const [resources, setResources] = useState<ResourceDetails | null>(null);
 
+  // Functions to toggle model visibility
   const handleOpenModel = () => {
     setIsModelOpen(true);
     setShowBookings(false);
@@ -49,35 +53,42 @@ const MakeBooking = ({
     setShowBookings(true);
   };
 
+  // Fetch institution and intervals
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const {institution, intervals} = await fetchInstitutionWithIntervals(instituionId);
+        const { institution, intervals } = await fetchInstitutionWithIntervals(
+          instituionId
+        );
         setInstitution(institution);
         setIntervals(intervals);
-      }catch(error){
-        console.error("Error fetching institution details: ", error)
+      } catch (error) {
+        console.error("Error fetching institution details: ", error);
       }
     };
     fetchDetails();
   }, [instituionId]);
 
+  // Fetch resource details
   useEffect(() => {
-    const fetchDescription = async () => {
+    const fetchDetails = async () => {
       try {
-        const description = await fetchResourceDesc(resourceId);
-        setResourceDesc(description);
+        const { imageUrl, description } = await fetchResourceDetails(
+          resourceId
+        );
+        setResources({ imageUrl, description });
       } catch (error) {
         console.error("Error fetching resource description:", error);
       }
     };
-    fetchDescription();
+    fetchDetails();
   }, [resourceId]);
 
+  // Fetch bookings whenever the resource ID or date changes
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const data = await FetchBookingResource(resourceId, date);
+        const data = await fetchBookingResource(resourceId, date);
         setBookings(data);
       } catch (error) {
         console.error("Error fetching bookings:", error);
@@ -86,6 +97,7 @@ const MakeBooking = ({
     fetchBookings();
   }, [resourceId, date]);
 
+  // Filter available end times based on selected start time and existing bookings
   const availableEndTimes = () => {
     if (!selectedStartTime) {
       return intervals.filter(
@@ -109,6 +121,7 @@ const MakeBooking = ({
     );
   };
 
+  // Filter available start times based on existing bookings
   const availableStartTimes = intervals.filter((interval) => {
     return !bookings.some((booking) =>
       isOverlapping(interval, interval, [
@@ -117,6 +130,7 @@ const MakeBooking = ({
     );
   });
 
+  // Update available end times when start time changes
   useEffect(() => {
     if (selectedStartTime) {
       const newAvailableEndTimes = availableEndTimes();
@@ -124,28 +138,44 @@ const MakeBooking = ({
     }
   }, [selectedStartTime, bookings, intervals]);
 
+  // Adjust selected end time if it's no longer available
   useEffect(() => {
     if (selectedStartTime) {
       const newAvailableEndTimes = availableEndTimes();
-      if(!newAvailableEndTimes.includes(selectedEndTime)){
+      if (!newAvailableEndTimes.includes(selectedEndTime)) {
         setSelectedEndTime(newAvailableEndTimes[0] || "");
       }
     }
   }, [selectedStartTime, bookings, intervals]);
 
+  // Reset selected times when the date changes
   useEffect(() => {
     setSelectedStartTime("");
     setSelectedEndTime("");
   }, [date]);
 
+  // Handle booking creation
   const handleBooking = async () => {
-    try{
-      await createBooking(resourceId, date, selectedStartTime, selectedEndTime, bookings);
+    // Validate that both start and end times are selected
+    if (!selectedStartTime || !selectedEndTime) {
+      alert("Please select both a start time and end time for your booking");
+      return;
+    }
+
+    try {
+      await createBooking(
+        resourceId,
+        date,
+        selectedStartTime,
+        selectedEndTime,
+        bookings
+      );
       alert("Booking created successfully");
 
-      const updatedBookings = await FetchBookingResource(resourceId, date);
+      // Fetch updated bookings after a successful booking
+      const updatedBookings = await fetchBookingResource(resourceId, date);
       setBookings(updatedBookings);
-    }catch(error: any){
+    } catch (error: any) {
       console.error("Error creating booking:", error);
       alert(error.message || "Failed to create booking");
     }
@@ -153,16 +183,12 @@ const MakeBooking = ({
 
   return (
     <div>
-      {institution?.imageUrl && (
-        <img
-          src={institution.imageUrl}
-          alt={institution.name}
-          width="200"
-        ></img>
+      {resources?.imageUrl && (
+        <img src={resources.imageUrl} alt={""} width="200"></img>
       )}
       <h2>Booking at {institution?.name}</h2>
       <h3>Description:</h3>
-      <p>{resourceDesc}</p>
+      <p>{resources?.description}</p>
       <DateSelector
         label="Date"
         date={date}

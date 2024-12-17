@@ -52,7 +52,9 @@ class BookingService {
       const resourceService = new ResourceService();
       for (let booking of responseJson) {
         if (booking.resourceId) {
-            booking.resourceName = await resourceService.fetchResourceName(booking.resourceId);
+          booking.resourceName = await resourceService.fetchResourceName(
+            booking.resourceId
+          );
         }
       }
       return responseJson as Booking[]; // Parse and return the response as an array of bookings
