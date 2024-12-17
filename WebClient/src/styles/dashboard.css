@@ -59,11 +59,14 @@ html, body{
     padding: 0;
     margin: 0;
     text-align: center;
-    height: calc(100vh - 60px);
+    height: auto;
     flex-direction: column;
     display: flex;
     box-sizing: border-box;
-    justify-content: space-evenly;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    font-size: 25px;
 }
 
 .existing-bookings{

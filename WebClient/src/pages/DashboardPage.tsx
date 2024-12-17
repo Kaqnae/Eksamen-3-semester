@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import List from "../components/List";
 import "../styles/dashboard.css";
 import TopBar from "../components/TopBar";
-import Drawing from "../assets/tegning.jpg";
+import RessourcePlanner from "../assets/resourceplanner.png";
 import ResourceService from "../service/ResourceService";
 import { Resource } from "../model/Resource";
 import MakeBooking from "../components/MachineBooking";
@@ -110,7 +110,10 @@ const Dashboard = () => {
         <div className="main-content">
           {/* If no resource is selected, display institution image */}
           {!selectedResource && (
-            <img src={institutionImg} alt="Institution Logo" />
+            <img src={institutionImg || RessourcePlanner} alt={RessourcePlanner} width={700}  onError={(e) => {
+              // Replace the src with a fallback image if the original image fails to load
+              (e.target as HTMLImageElement).src = RessourcePlanner;
+            }}/>
           )}
           {/* If a resource is selected, display the booking form for that resource */}
           {selectedResource && (

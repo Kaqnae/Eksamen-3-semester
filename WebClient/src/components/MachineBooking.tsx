@@ -8,6 +8,7 @@ import { Institution } from "../model/Institution";
 import { Resource, ResourceDetails } from "../model/Resource";
 import List from "./List";
 import "../styles/booking.css";
+import ResourcePicture from "../assets/Monoblock-2.jpg";
 import ErrorReport from "./MakeErrorReport";
 import DateSelector from "./DateSelector";
 import TimeSelector from "./TimeSelector";
@@ -183,9 +184,15 @@ const MakeBooking = ({
 
   return (
     <div>
-      {resources?.imageUrl && (
-        <img src={resources.imageUrl} alt={""} width="200"></img>
-      )}
+      <img
+        src={resources?.imageUrl || ResourcePicture}
+        alt="Fallback image"
+        width="300"
+        onError={(e) => {
+          // Replace the src with a fallback image if the original image fails to load
+          (e.target as HTMLImageElement).src = ResourcePicture;
+        }}
+      />
       <h2>Booking at {institution?.name}</h2>
       <h3>Description:</h3>
       <p>{resources?.description}</p>
