@@ -233,7 +233,15 @@ const MakeBooking = ({
           <h3>Existing Bookings:</h3>
           {bookings.length > 0 ? (
             <List
-              items={bookings}
+              items={bookings.slice().sort((a, b) => {
+                const dateA = new Date(
+                  `${a.date.split("T")[0]}T${a.startTime}`
+                );
+                const dateB = new Date(
+                  `${b.date.split("T")[0]}T${b.startTime}`
+                );
+                return dateA.getTime() - dateB.getTime();
+              })}
               renderItem={(booking) => (
                 <div>
                   <strong>Date:</strong>{" "}

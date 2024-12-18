@@ -31,7 +31,6 @@ const LoginForm = () => {
       setError(null); // Clear any existing error messages
       navigate("/dashboard"); // Navigate to the dashboard on successful login
       const userId = localStorage.getItem("userId");
-      console.log(userId);
     } catch (err: any) {
       // Set the error message if the login attempt fails
       setError(err.message);
