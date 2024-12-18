@@ -15,10 +15,6 @@ import TimeSelector from "./TimeSelector";
 import { fetchInstitutionWithIntervals } from "../utils/institutionUtils";
 import { fetchResourceDetails } from "../utils/resourceUtils";
 import { createBooking, fetchBookingResource } from "../utils/bookingUtils";
-import {
-  calculateAvailableEndTimes,
-  calculateAvailableStartTimes,
-} from "../utils/timeAvailabilityUtils";
 
 const MakeBooking = ({
   instituionId,
