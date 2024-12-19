@@ -96,36 +96,63 @@ const MakeBooking = ({
 
   // Filter available end times based on selected start time and existing bookings
   const availableEndTimes = () => {
+    const currentTime = new Date().toTimeString().slice(0, 5); // Current time in "HH:MM" format
+    const isToday = date === new Date().toISOString().split("T")[0]; // Check if the selected date is today
+  
     if (!selectedStartTime) {
-      return intervals.filter(
-        (interval) =>
-          !bookings.some((booking) =>
-            isOverlapping(selectedStartTime, interval, [
-              {
-                date: date,
-                startTime: booking.startTime,
-                endTime: booking.endTime,
-              },
-            ])
-          )
-      );
+      return intervals.filter((interval) => {
+        // Exclude past times if the selected date is today
+        if (isToday && interval <= currentTime) {
+          return false;
+        }
+  
+        // Exclude intervals that overlap with existing bookings
+        return !bookings.some((booking) =>
+          isOverlapping(selectedStartTime, interval, [
+            {
+              date: date,
+              startTime: booking.startTime,
+              endTime: booking.endTime,
+            },
+          ])
+        );
+      });
     }
-
-    return intervals.filter(
-      (interval) =>
-        interval > selectedStartTime &&
-        !isOverlapping(selectedStartTime, interval, bookings)
-    );
+  
+    return intervals.filter((interval) => {
+      // Exclude past times if the selected date is today
+      if (isToday && interval <= currentTime) {
+        return false;
+      }
+  
+      // Ensure the end time is after the selected start time
+      if (interval <= selectedStartTime) {
+        return false;
+      }
+  
+      // Exclude intervals that overlap with existing bookings
+      return !isOverlapping(selectedStartTime, interval, bookings);
+    });
   };
 
   // Filter available start times based on existing bookings
   const availableStartTimes = intervals.filter((interval) => {
+    const currentTime = new Date().toTimeString().slice(0, 5); // Current time in "HH:MM" format
+    const isToday = date === new Date().toISOString().split("T")[0]; // Check if the selected date is today
+  
+    // Filter out times in the past if the date is today
+    if (isToday && interval < currentTime) {
+      return false;
+    }
+  
+    // Exclude times overlapping with existing bookings
     return !bookings.some((booking) =>
       isOverlapping(interval, interval, [
         { date: date, startTime: booking.startTime, endTime: booking.endTime },
       ])
     );
   });
+  
 
   // Update available end times when start time changes
   useEffect(() => {
